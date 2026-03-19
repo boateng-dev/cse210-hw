@@ -4,39 +4,50 @@ class GradeCalculator
 {
     static void Main(string[] args)
     {
-        Console.Write("Enter your grade percentage: ");
-        int grade = Convert.ToInt32(Console.ReadLine());
-        string letter = "";
-        string sign = "";
+       Journal journal = new Journal();
+        PromptGenerator promptGenerator = new PromptGenerator();
 
-        if (grade >= 90)
+        while (true)
         {
-            letter = "A";
-        }
-        else if (grade >= 80)
-        {
-            letter = "B";
-        }
-        else if (grade >= 70)
-        {
-            letter = "C";
-        }
-        else if (grade >= 60)
-        {
-            letter = "D";
-        }
-        else
-        {
-            letter = "F";
-        }
-        Console.WriteLine($"Your letter grade is: {letter}");
-        if (grade >= 70)
-        {
-            Console.WriteLine("Congratulations, you passed the course");
-        }
-        else
-        {
-            Console.WriteLine("Don't worry, you try again next time");
+            Console.WriteLine("1. Write a new entry");
+            Console.WriteLine("2. Display journal");
+            Console.WriteLine("3. Save journal to file");
+            Console.WriteLine("4. Load journal from file");
+            Console.WriteLine("5. Quit");
+
+            Console.Write("Choose an option: ");
+            int option = Convert.ToInt32(Console.ReadLine());
+
+            switch (option)
+            {
+                case 1:
+                    string prompt = promptGenerator.GetRandomPrompt();
+                    Console.WriteLine(prompt);
+                    Console.Write("Enter your response: ");
+                    string response = Console.ReadLine();
+                    string date = DateTime.Now.ToShortDateString();
+                    Entry entry = new Entry(prompt, response, date);
+                    journal.AddEntry(entry);
+                    break;
+                case 2:
+                    journal.Display();
+                    break;
+                case 3:
+                    Console.Write("Enter filename: ");
+                    string saveFilename = Console.ReadLine();
+                    journal.SaveToFile(saveFilename);
+                    break;
+                case 4:
+                    Console.Write("Enter filename: ");
+                    string loadFilename = Console.ReadLine();
+                    journal.LoadFromFile(loadFilename);
+                    break;
+                case 5:
+                    return;
+                default:
+                    Console.WriteLine("Invalid option");
+                    break;
+            }
         }
     }
 }
